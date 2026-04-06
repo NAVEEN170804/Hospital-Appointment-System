@@ -96,7 +96,7 @@ src/
 ### 1️⃣ Clone the repository
 
 ```bash
-git clone [https://github.com/your-username/your-repo-name.git](https://github.com/NAVEEN170804/Hospital-Appointment-System)
+git clone https://github.com/NAVEEN170804/Hospital-Appointment-System.git
 ```
 
 ---
@@ -198,10 +198,11 @@ Password: admin123
 
 ## 👨‍💻 Author
 
-**Naveen A**
-📧 Email: [naveena170804@gmail.com](mailto:naveena170804@gmail.com)
-🐙 GitHub: [https://github.com/your-username](https://github.com/NAVEEN170804)
-🌐 Portfolio: [Link](https://naveen170804.github.io/Portfolio)
+* **Naveen A**
+* 📧 Email: [naveena170804@gmail.com](mailto:naveena170804@gmail.com)
+* 🐙 GitHub: [NAVEEN170804](https://github.com/NAVEEN170804)
+* 🌐 Portfolio: [View Portfolio](https://naveen170804.github.io/Portfolio)
+
 
 
 
