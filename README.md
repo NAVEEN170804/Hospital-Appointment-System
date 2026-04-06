@@ -1,4 +1,4 @@
-# 🏥 Hospital Management System (Spring Boot)
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/cbc3c990-1b6a-4933-ac93-33d1e08ecc49" /># 🏥 Hospital Management System (Spring Boot)
 
 A full-stack **Hospital Management System** developed using **Spring Boot**, designed to simplify and manage interactions between **patients, doctors, and administrators**.
 
@@ -154,11 +154,26 @@ Password: admin123
 *Add your project screenshots here*
 
 * 🔐 Login Page
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/b48eb147-ddde-4f55-8a30-15283d78ba96" />
+
 * 📝 Registration Page
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/9632210e-5846-4a48-953f-10af9d51ecda" />
+
 * 👨‍💼 Admin Dashboard
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/207d687d-9d3b-46ad-a4f6-fb2fbfd48924" />
+
+  
 * 🧑‍⚕️ Doctor Dashboard
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/0fe1cd65-5d56-4862-8b96-fcc64dec30a0" />
+
+
 * 🧑 Patient Dashboard
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/4ded091c-437f-4260-b0e2-2128f86cdcf3" />
+
+
 * 📅 Appointment Booking
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/cc1ee61e-fe35-46d8-af75-f76ec770bc43" />
+
 
 ---
 
