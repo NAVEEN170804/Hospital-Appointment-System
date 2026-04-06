@@ -96,7 +96,7 @@ src/
 ### 1️⃣ Clone the repository
 
 ```bash
-git clone https://github.com/your-username/your-repo-name.git
+git clone [https://github.com/your-username/your-repo-name.git](https://github.com/NAVEEN170804/Hospital-Appointment-System)
 ```
 
 ---
@@ -151,10 +151,9 @@ Password: admin123
 
 ## 📸 Screenshots
 
-*Add your project screenshots here*
-
 * 🔐 Login Page
-<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/b48eb147-ddde-4f55-8a30-15283d78ba96" />
+<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/3384187e-a60f-4a19-ac04-90004d94b97a" />
+
 
 * 📝 Registration Page
 <img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/9632210e-5846-4a48-953f-10af9d51ecda" />
@@ -200,21 +199,10 @@ Password: admin123
 ## 👨‍💻 Author
 
 **Naveen A**
-Electronics and Communication Engineering
-Aspiring Java Full Stack Developer 🚀
+📧 Email: [naveena170804@gmail.com](mailto:naveena170804@gmail.com)
+🐙 GitHub: [https://github.com/your-username](https://github.com/NAVEEN170804)
+🌐 Portfolio: [Link](https://naveen170804.github.io/Portfolio)
 
----
 
-## ⭐ Support
 
-If you like this project:
 
-⭐ Star the repository
-🍴 Fork it
-📢 Share it
-
----
-
-## 📬 Contact
-
-Feel free to connect for collaboration or opportunities!
