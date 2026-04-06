@@ -1,4 +1,4 @@
-<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/cbc3c990-1b6a-4933-ac93-33d1e08ecc49" /># 🏥 Hospital Management System (Spring Boot)
+# 🏥 Hospital Management System (Spring Boot)
 
 A full-stack **Hospital Management System** developed using **Spring Boot**, designed to simplify and manage interactions between **patients, doctors, and administrators**.
 
