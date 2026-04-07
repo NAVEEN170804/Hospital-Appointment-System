@@ -2,7 +2,7 @@
 
 A full-stack **Hospital Management System** developed using **Spring Boot**, designed to simplify and manage interactions between **patients, doctors, and administrators**.
 
-This system provides secure role-based access, appointment scheduling, doctor approval workflow, and efficient healthcare management.
+This system provides secure role-based access, appointment scheduling, doctor approval workflow, **prescription management**, and efficient healthcare operations.
 
 ---
 
@@ -28,6 +28,7 @@ This system provides secure role-based access, appointment scheduling, doctor ap
 * Manage availability using time slots
 * View patient appointments
 * Approve or reject appointment requests
+* 📝 **Create and manage prescriptions for patients**
 
 ---
 
@@ -41,6 +42,7 @@ This system provides secure role-based access, appointment scheduling, doctor ap
   * 🟡 Pending
   * 🟢 Approved
   * 🔴 Rejected
+* 📝 **View prescriptions provided by doctors**
 
 ---
 
@@ -53,6 +55,7 @@ This system provides secure role-based access, appointment scheduling, doctor ap
   * Doctors
   * Patients
   * Appointments
+  * Prescriptions
 * Delete users and records
 
 ---
@@ -62,6 +65,20 @@ This system provides secure role-based access, appointment scheduling, doctor ap
 * Book appointments within doctor time slots
 * Prevent duplicate bookings (±5 minutes validation)
 * Real-time appointment status updates
+
+---
+
+### 📝 Prescription Module (NEW 🚀)
+
+* Doctors can create prescriptions after consultation
+* Add details like:
+
+  * Diagnosis
+  * Medicines
+  * Dosage instructions
+  * Notes
+* Patients can view their prescription history
+* Secure access (only assigned patient & doctor)
 
 ---
 
@@ -86,7 +103,8 @@ src/
  ├── dao/               # Repository layer (JPA)
  ├── entity/            # Database entities
  ├── security/          # Security configuration
- └── templates/         # Thymeleaf HTML pages
+ ├── templates/         # Thymeleaf HTML pages
+ └── prescription/      # Prescription module
 ```
 
 ---
@@ -152,27 +170,14 @@ Password: admin123
 ## 📸 Screenshots
 
 * 🔐 Login Page
-<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/3384187e-a60f-4a19-ac04-90004d94b97a" />
-
-
-* 📝 Registration Page
-<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/9632210e-5846-4a48-953f-10af9d51ecda" />
-
-* 👨‍💼 Admin Dashboard
-<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/207d687d-9d3b-46ad-a4f6-fb2fbfd48924" />
 
   
+* 📝 Registration Page
+* 👨‍💼 Admin Dashboard
 * 🧑‍⚕️ Doctor Dashboard
-<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/0fe1cd65-5d56-4862-8b96-fcc64dec30a0" />
-
-
 * 🧑 Patient Dashboard
-<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/4ded091c-437f-4260-b0e2-2128f86cdcf3" />
-
-
 * 📅 Appointment Booking
-<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/cc1ee61e-fe35-46d8-af75-f76ec770bc43" />
-
+* 📝 Prescription Page (NEW)
 
 ---
 
@@ -181,6 +186,7 @@ Password: admin123
 * ✅ Role-based secure authentication
 * ✅ Admin-controlled doctor approval system
 * ✅ Smart appointment booking with conflict validation
+* ✅ 📝 Prescription management system
 * ✅ Clean UI with Thymeleaf templates
 * ✅ Modular architecture (Controller → Service → Repository)
 
@@ -190,7 +196,6 @@ Password: admin123
 
 * 📧 Email notifications for appointment updates
 * 💳 Online payment integration
-* 📝 Prescription management system
 * 📱 QR code-based appointment system
 * 📊 Advanced analytics dashboard
 
@@ -203,7 +208,4 @@ Password: admin123
 * 🐙 GitHub: [NAVEEN170804](https://github.com/NAVEEN170804)
 * 🌐 Portfolio: [View Portfolio](https://naveen170804.github.io/Portfolio)
 
-
-
-
-
+---
