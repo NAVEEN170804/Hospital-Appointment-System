@@ -12,15 +12,23 @@
 	
 	    @Autowired PatientRepo repo;
 	
-	    public List<Patient> getAllPatients() { return repo.findAll(); }
+	    public List<Patient> getAllPatients(){ 
+	    	       return repo.findAll(); 
+	    }
 	
 	    public Optional<Patient> getPatientByEmail(String email) {
 	        return repo.findByUserEmail(email);
 	    }
 	
-	    public void savePatient(Patient p) { repo.save(p); }
+	    public void savePatient(Patient p) { 
+	    	    repo.save(p); 
+	    }
 	
-	    public void deletePatient(int id) { repo.deleteById(id); }
+	    public void deletePatient(int id) { 
+	    	    repo.deleteById(id); 
+	    	}
 	
-	    public Optional<Patient> getById(int id) { return repo.findById(id); }
+	    public Optional<Patient> getById(int id) { 
+	      	return repo.findById(id); 
+	    	}
 	}

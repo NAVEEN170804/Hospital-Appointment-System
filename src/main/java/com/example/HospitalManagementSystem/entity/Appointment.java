@@ -34,21 +34,53 @@ public class Appointment {
         this.patient = patient;
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+	public int getId() {
+		return id;
+	}
 
-    public AppointmentStatus getStatus() { return status; }
-    public void setStatus(AppointmentStatus status) { this.status = status; }
+	public void setId(int id) {
+		this.id = id;
+	}
 
-    public LocalDateTime getAppointmentDate() { return appointmentDate; }
-    public void setAppointmentDate(LocalDateTime appointmentDate) { this.appointmentDate = appointmentDate; }
+	public AppointmentStatus getStatus() {
+		return status;
+	}
 
-    public String getNotes() { return notes; }
-    public void setNotes(String notes) { this.notes = notes; }
+	public void setStatus(AppointmentStatus status) {
+		this.status = status;
+	}
 
-    public Doctor getDoctor() { return doctor; }
-    public void setDoctor(Doctor doctor) { this.doctor = doctor; }
+	public LocalDateTime getAppointmentDate() {
+		return appointmentDate;
+	}
 
-    public Patient getPatient() { return patient; }
-    public void setPatient(Patient patient) { this.patient = patient; }
+	public void setAppointmentDate(LocalDateTime appointmentDate) {
+		this.appointmentDate = appointmentDate;
+	}
+
+	public String getNotes() {
+		return notes;
+	}
+
+	public void setNotes(String notes) {
+		this.notes = notes;
+	}
+
+	public Doctor getDoctor() {
+		return doctor;
+	}
+
+	public void setDoctor(Doctor doctor) {
+		this.doctor = doctor;
+	}
+
+	public Patient getPatient() {
+		return patient;
+	}
+
+	public void setPatient(Patient patient) {
+		this.patient = patient;
+	}
+
+   
 }

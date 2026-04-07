@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Prescriptions — MedCare HMS</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div class="layout">
+
+  <!-- Sidebar -->
+  <div th:replace="~{fragments/sidebar :: patient('prescriptions')}">
+    <div class="sidebar-logo">
+      <div class="sidebar-logo-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/></svg>
+      </div>
+      <span>MedCare HMS</span>
+    </div>
+    <nav class="sidebar-nav">
+      <a th:href="@{/patient/dashboard}" class="nav-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Dashboard
+      </a>
+      <a th:href="@{/patient/book}" class="nav-item">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path stroke-linecap="round" d="M16 2v4M8 2v4M3 10h18"/></svg>
+        Book Appointment
+      </a>
+      <a th:href="@{/patient/prescriptions}" class="nav-item active">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414A1 1 0 0120 9.414V19a2 2 0 01-2 2z"/></svg>
+        My Prescriptions
+      </a>
+    </nav>
+    <form th:action="@{/logout}" method="post" style="margin-top:auto;padding:16px;">
+      <button type="submit" class="btn btn-ghost" style="width:100%;justify-content:flex-start;gap:10px;color:var(--text-muted);">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="16" height="16"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
+        Sign Out
+      </button>
+    </form>
+  </div>
+
+  <!-- Main Content -->
+  <main class="content">
+    <div class="content-header">
+      <div>
+        <h1 class="content-title">My Prescriptions</h1>
+        <p class="content-subtitle">Prescriptions issued by your doctors.</p>
+      </div>
+    </div>
+
+    <!-- Empty state -->
+    <div th:if="${#lists.isEmpty(prescriptions)}" class="empty-state">
+      <div class="empty-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414A1 1 0 0120 9.414V19a2 2 0 01-2 2z"/></svg>
+      </div>
+      <h3>No Prescriptions Yet</h3>
+      <p>Your doctor will add a prescription after your appointment.</p>
+      <a th:href="@{/patient/dashboard}" class="btn btn-primary">Back to Dashboard</a>
+    </div>
+
+    <!-- Prescriptions cards -->
+    <div th:unless="${#lists.isEmpty(prescriptions)}" class="card-grid">
+      <div th:each="rx : ${prescriptions}" class="appt-card">
+        <div class="appt-card-header">
+          <div>
+            <div class="appt-avatar" th:text="${#strings.substring(rx.appointment.doctor.name,0,2).toUpperCase()}"></div>
+            <div class="appt-doctor-name" th:text="'Dr. ' + ${rx.appointment.doctor.name}"></div>
+            <div class="appt-spec" th:text="${rx.appointment.doctor.specialization}"></div>
+          </div>
+          <span class="badge badge-approved">Issued</span>
+        </div>
+
+        <div class="appt-divider"></div>
+
+        <div class="appt-meta">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path stroke-linecap="round" d="M16 2v4M8 2v4M3 10h18"/></svg>
+          <span>Appointment: </span>
+          <strong th:text="${#temporals.format(rx.appointment.appointmentDate, 'dd MMM yyyy, hh:mm a')}"></strong>
+        </div>
+
+        <div class="appt-meta">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414A1 1 0 0120 9.414V19a2 2 0 01-2 2z"/></svg>
+          <span>Diagnosis: </span>
+          <strong th:text="${rx.diagnosis}"></strong>
+        </div>
+
+        <div class="appt-notes" th:text="${#strings.abbreviate(rx.medicines, 100)}"></div>
+
+        <div class="appt-actions">
+          <a th:href="@{/patient/prescription/{id}(id=${rx.id})}" class="btn btn-primary" style="width:100%;text-align:center;">
+            View Full Prescription
+          </a>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

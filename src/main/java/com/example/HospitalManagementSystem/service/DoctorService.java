@@ -18,9 +18,15 @@ public class DoctorService {
         return repo.findByUserEmail(email);
     }
 
-    public void saveDoctor(Doctor d) { repo.save(d); }
+    public void saveDoctor(Doctor d) { 
+    	    repo.save(d); 
+    	}
 
-    public void deleteDoctor(int id) { repo.deleteById(id); }
+    public void deleteDoctor(int id) { 
+    	    repo.deleteById(id); 
+    	}
 
-    public Optional<Doctor> getById(int id) { return repo.findById(id); }
+    public Optional<Doctor> getById(int id) { 
+    	     return repo.findById(id); 
+    	}
 }
