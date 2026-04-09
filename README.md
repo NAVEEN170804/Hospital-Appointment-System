@@ -1,79 +1,89 @@
 # 🏥 Hospital Management System (Spring Boot)
 
-A full-stack **Hospital Management System** developed using **Spring Boot**, designed to simplify and manage interactions between **patients, doctors, and administrators**.
+A full-stack Hospital Management System developed using Spring Boot, designed to efficiently manage interactions between patients, doctors, and administrators.
 
-This system provides secure role-based access, appointment scheduling, doctor approval workflow, and efficient healthcare management.
+This system includes secure role-based authentication, smart appointment booking with conflict prevention, doctor approval workflow, and a complete prescription management system.
 
 ---
 
 ## 🚀 Features
 
 ### 🔐 Authentication & Authorization
-
-* Secure login and registration system
-* Role-based access control:
-
-  * 👨‍💼 Admin
-  * 🧑‍⚕️ Doctor
-  * 🧑 Patient
-* Password encryption using BCrypt
-* Spring Security integration
+- Secure login and registration system  
+- Role-based access (Admin, Doctor, Patient)  
+- Password encryption using BCrypt  
+- Spring Security integration  
+- Doctors cannot login until approved by admin  
 
 ---
 
 ### 🧑‍⚕️ Doctor Module
-
-* Doctor registration with **admin approval required**
-* Cannot login until approved by admin
-* Manage availability using time slots
-* View patient appointments
-* Approve or reject appointment requests
+- Doctor registration with admin approval  
+- Manage availability using day-wise time slots  
+- View appointments  
+- Approve / Reject appointments  
+- Create & update prescriptions  
+- View patient prescription history  
 
 ---
 
 ### 🧑 Patient Module
-
-* Patient registration and login
-* Book appointments with available doctors
-* View appointment history
-* Track appointment status:
-
-  * 🟡 Pending
-  * 🟢 Approved
-  * 🔴 Rejected
+- Register and login  
+- View approved doctors only  
+- Book appointments using time slots  
+- View appointment history  
+- Track status (Pending / Approved / Rejected)  
+- View prescription history  
 
 ---
 
 ### 👨‍💼 Admin Module
-
-* Dashboard with system analytics
-* Approve / reject doctor registrations
-* Manage:
-
-  * Doctors
-  * Patients
-  * Appointments
-* Delete users and records
+- Dashboard with system overview  
+- Approve / Reject doctors  
+- Manage doctors, patients, appointments  
+- Delete users and records  
 
 ---
 
 ### 📅 Appointment System
-
-* Book appointments within doctor time slots
-* Prevent duplicate bookings (±5 minutes validation)
-* Real-time appointment status updates
+- Slot-based booking system  
+- Prevents double booking using:
+  - Same time conflict (±4 minutes logic)  
+  - Same patient booking multiple doctors at same time  
+  - One doctor per day per patient  
+- Uses pessimistic locking for concurrency safety  
+- Appointment status: Pending → Approved / Rejected  
 
 ---
 
-## 🏗️ Tech Stack
+### 📝 Prescription Module
+- One prescription per appointment  
+- Doctors can add:
+  - Diagnosis  
+  - Medicines  
+  - Instructions  
+- Edit existing prescriptions  
+- Patients can view full history  
+- Secure access (only doctor & patient)  
+
+---
+
+### ⏰ Doctor Time Slot System
+- Doctors define working slots (day + time)  
+- Patients can book only within available slots  
+- Prevents booking outside working hours  
+
+---
+
+## 🧰 Tech Stack
 
 | Layer      | Technology            |
-| ---------- | --------------------- |
-| Backend    | Java, Spring Boot     |
-| Security   | Spring Security       |
-| Database   | MySQL (JPA/Hibernate) |
-| Frontend   | Thymeleaf, HTML, CSS  |
-| Build Tool | Maven                 |
+|------------|---------------------|
+| Backend    | Spring Boot          |
+| Security   | Spring Security      |
+| Database   | MySQL (JPA/Hibernate)|
+| Frontend   | Thymeleaf, HTML, CSS |
+| Build Tool | Maven                |
 
 ---
 
@@ -81,12 +91,13 @@ This system provides secure role-based access, appointment scheduling, doctor ap
 
 ```
 src/
- ├── controller/        # Handles HTTP requests
- ├── service/           # Business logic layer
- ├── dao/               # Repository layer (JPA)
- ├── entity/            # Database entities
- ├── security/          # Security configuration
- └── templates/         # Thymeleaf HTML pages
+ ├── controller/
+ ├── service/
+ ├── dao/
+ ├── entity/
+ ├── security/
+ ├── templates/
+ └── static/
 ```
 
 ---
@@ -94,116 +105,106 @@ src/
 ## ⚙️ Setup & Installation
 
 ### 1️⃣ Clone the repository
-
 ```bash
 git clone https://github.com/NAVEEN170804/Hospital-Appointment-System.git
 ```
 
----
-
-### 2️⃣ Open in IDE
-
-* IntelliJ IDEA / Eclipse / Spring Tool Suite
-
----
-
-### 3️⃣ Configure Database
-
-Update `application.properties`:
-
-```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/hospital_db
-spring.datasource.username=root
-spring.datasource.password=your_password
-
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.show-sql=true
+### 2️⃣ Create Database
+```sql
+CREATE DATABASE hospital;
 ```
 
----
+### 3️⃣ Configure application.properties
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/hospital
+spring.datasource.username=root
+spring.datasource.password=your_password
+spring.jpa.hibernate.ddl-auto=update
+```
 
-### 4️⃣ Run the Application
-
+### 4️⃣ Run the Project
 ```bash
 mvn spring-boot:run
 ```
 
----
-
 ### 5️⃣ Open in Browser
-
 ```
 http://localhost:8080/login
 ```
 
 ---
 
-## 🔐 Default Admin Credentials
+## 🔐 Default Admin Login
 
 ```
-Email: admin@medcare.com
-Password: admin123
+Email    : admin@medcare.com  
+Password : admin123  
 ```
-
-👉 Automatically created using DataSeeder
 
 ---
 
 ## 📸 Screenshots
 
-* 🔐 Login Page
-<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/3384187e-a60f-4a19-ac04-90004d94b97a" />
+### 🔐 Login Page
+<img width="1920" height="1020" alt="Login_page" src="https://github.com/user-attachments/assets/964b099b-c62c-40ed-b08d-8ad7b6c94234" />
 
+### 📝 Registration Page
+<img width="1920" height="1020" alt="Register_Page" src="https://github.com/user-attachments/assets/f1878ad5-a4b0-473d-bd80-9206b41de002" />
 
-* 📝 Registration Page
-<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/9632210e-5846-4a48-953f-10af9d51ecda" />
+### 👨‍💼 Admin Dashboard
+<img width="1920" height="1020" alt="Admin-dashboard" src="https://github.com/user-attachments/assets/26a675cd-0ce8-405e-91db-83ec426e5083" />
 
-* 👨‍💼 Admin Dashboard
-<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/207d687d-9d3b-46ad-a4f6-fb2fbfd48924" />
+### 📊 Admin View Appointments
+<img width="1920" height="1020" alt="Admin-all-appointments" src="https://github.com/user-attachments/assets/590fa4e9-f1b0-4a20-b665-9edb2d198183" />
 
-  
-* 🧑‍⚕️ Doctor Dashboard
-<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/0fe1cd65-5d56-4862-8b96-fcc64dec30a0" />
+### 🧑‍⚕️ Doctor Dashboard
+<img width="1920" height="1020" alt="Doctor-dashboard" src="https://github.com/user-attachments/assets/ea5c9acf-0a84-4427-9756-27814acb51a8" />
 
+### 📝 Doctor Prescription
+<img width="1920" height="1020" alt="Doctor-prescription-write" src="https://github.com/user-attachments/assets/d4a0d1a3-e4de-4ea6-9f13-858b29ee89ce" />
 
-* 🧑 Patient Dashboard
-<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/4ded091c-437f-4260-b0e2-2128f86cdcf3" />
+### ⏰ Doctor Time Slots
+<img width="1920" height="1020" alt="Doctor-time-slots" src="https://github.com/user-attachments/assets/010866b9-38c0-433b-bb2f-46d0c6fcd60a" />
 
+### 🧑 Patient Dashboard
+<img width="1920" height="1020" alt="Patient-dashboard" src="https://github.com/user-attachments/assets/abb0f318-3b8b-4f19-b1e3-53e23bdce068" />
 
-* 📅 Appointment Booking
-<img width="1920" height="1020" alt="image" src="https://github.com/user-attachments/assets/cc1ee61e-fe35-46d8-af75-f76ec770bc43" />
+### 📅 Appointment Booking
+<img width="1920" height="1020" alt="Patient-book-appointment" src="https://github.com/user-attachments/assets/1964c625-6fc2-43ed-ae31-cced0b2fd987" />
 
+### 📝 Prescription History
+<img width="1920" height="1020" alt="Patient-prescription-history" src="https://github.com/user-attachments/assets/afa86a91-0772-4c10-8329-e9a405bb65e3" />
 
 ---
 
 ## 🔥 Key Highlights
 
-* ✅ Role-based secure authentication
-* ✅ Admin-controlled doctor approval system
-* ✅ Smart appointment booking with conflict validation
-* ✅ Clean UI with Thymeleaf templates
-* ✅ Modular architecture (Controller → Service → Repository)
+- Role-based secure authentication  
+- Admin approval system for doctors  
+- Smart appointment conflict prevention  
+- Time-slot based scheduling  
+- One prescription per appointment  
+- Concurrency-safe booking using locking  
+- Clean MVC architecture  
 
 ---
 
 ## 📌 Future Enhancements
 
-* 📧 Email notifications for appointment updates
-* 💳 Online payment integration
-* 📝 Prescription management system
-* 📱 QR code-based appointment system
-* 📊 Advanced analytics dashboard
+- Email notifications  
+- Online payment integration  
+- QR code-based appointment system  
+- Advanced analytics dashboard  
 
 ---
 
 ## 👨‍💻 Author
 
-* **Naveen A**
-* 📧 Email: [naveena170804@gmail.com](mailto:naveena170804@gmail.com)
-* 🐙 GitHub: [NAVEEN170804](https://github.com/NAVEEN170804)
-* 🌐 Portfolio: [View Portfolio](https://naveen170804.github.io/Portfolio)
+**Naveen A**  
+📧 naveena170804@gmail.com  
+🐙 https://github.com/NAVEEN170804  
+🌐 https://naveen170804.github.io/Portfolio  
 
+---
 
-
-
-
+⭐ If you like this project, give it a star on GitHub!
