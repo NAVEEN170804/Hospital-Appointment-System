@@ -3,20 +3,19 @@ package com.example.HospitalManagementSystem.dao;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import com.example.HospitalManagementSystem.entity.Prescription;
 
 public interface PrescriptionRepo extends JpaRepository<Prescription, Integer> {
 
-    // Get a prescription by appointment id
+    // All prescriptions for a patient (patient dashboard history)
+    List<Prescription> findByPatientIdOrderByPrescribedDateDesc(int patientId);
+
+    // All prescriptions written by a doctor for a specific patient (doctor view)
+    List<Prescription> findByPatientIdAndDoctorIdOrderByPrescribedDateDesc(int patientId, int doctorId);
+
+    // All prescriptions written by a doctor (for doctor's own records)
+    List<Prescription> findByDoctorIdOrderByPrescribedDateDesc(int doctorId);
+
+    // Enforce one-per-appointment: check if a prescription already exists for this appointment
     Optional<Prescription> findByAppointmentId(int appointmentId);
-
-    // Get all prescriptions for a specific patient (via appointment → patient)
-    @Query("SELECT p FROM Prescription p WHERE p.appointment.patient.id = :patientId")
-    List<Prescription> findByPatientId(@Param("patientId") int patientId);
-
-    // Get all prescriptions written by a specific doctor (via appointment → doctor)
-    @Query("SELECT p FROM Prescription p WHERE p.appointment.doctor.id = :doctorId")
-    List<Prescription> findByDoctorId(@Param("doctorId") int doctorId);
 }

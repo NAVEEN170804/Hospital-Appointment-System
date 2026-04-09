@@ -10,31 +10,22 @@ import com.example.HospitalManagementSystem.entity.Prescription;
 @Service
 public class PrescriptionService {
 
-    @Autowired
-    PrescriptionRepo repo;
+    @Autowired PrescriptionRepo repo;
 
-    public void save(Prescription p) 
-    { 
-     	repo.save(p); 
-    	}
+    public void save(Prescription p) { repo.save(p); }
 
-    public Optional<Prescription> getByAppointmentId(int appointmentId) {
-        return repo.findByAppointmentId(appointmentId);
+    public Optional<Prescription> getById(int id) { return repo.findById(id); }
+
+    public List<Prescription> getByPatient(int patientId) {
+        return repo.findByPatientIdOrderByPrescribedDateDesc(patientId);
     }
 
-    public List<Prescription> getByPatientId(int patientId) {
-        return repo.findByPatientId(patientId);
+
+    public List<Prescription> getByPatientAndDoctor(int patientId, int doctorId) {
+        return repo.findByPatientIdAndDoctorIdOrderByPrescribedDateDesc(patientId, doctorId);
     }
 
-    public List<Prescription> getByDoctorId(int doctorId) {
-        return repo.findByDoctorId(doctorId);
-    }
-
-    public Optional<Prescription> getById(int id) {
-        return repo.findById(id);
-    }
-
-    public void delete(int id) { 
-    	     repo.deleteById(id); 
+    public List<Prescription> getByDoctor(int doctorId) {
+        return repo.findByDoctorIdOrderByPrescribedDateDesc(doctorId);
     }
 }

@@ -2,6 +2,8 @@ package com.example.HospitalManagementSystem.controller;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,39 +16,50 @@ import com.example.HospitalManagementSystem.service.*;
 @RequestMapping("/patient")
 public class PatientController {
 
-    @Autowired DoctorRepo doctorRepo;
-    @Autowired PatientService patientService;
-    @Autowired AppointmentService appointmentService;
+    @Autowired DoctorRepo           doctorRepo;
+    @Autowired PatientService       patientService;
+    @Autowired AppointmentService   appointmentService;
     @Autowired DoctorTimeSlotService slotService;
-
+    @Autowired PrescriptionService  prescriptionService;   
+    
     @GetMapping("/dashboard")
     public String dashboard(Model model, Principal principal) {
         Patient patient = patientService.getPatientByEmail(principal.getName()).orElse(null);
 
         if (patient == null) {
             model.addAttribute("error", "Patient profile not found.");
-            model.addAttribute("appointments", java.util.Collections.emptyList());
-            model.addAttribute("totalCount", 0);
-            model.addAttribute("pendingCount", 0);
-            model.addAttribute("approvedCount", 0);
+            model.addAttribute("appointments",          Collections.emptyList());
+            model.addAttribute("recentPrescriptions",   Collections.emptyList());
+            model.addAttribute("totalCount",       0);
+            model.addAttribute("pendingCount",     0);
+            model.addAttribute("approvedCount",    0);
+            model.addAttribute("prescriptionCount", 0);
         } else {
-            java.util.List<Appointment> appts =
+            List<Appointment> appts =
                     appointmentService.getPatientAppointments(patient.getId());
-            model.addAttribute("patient", patient);
+
+           
+            List<com.example.HospitalManagementSystem.entity.Prescription> allRx =
+                    prescriptionService.getByPatient(patient.getId());
+            List<com.example.HospitalManagementSystem.entity.Prescription> recentRx =
+                    allRx.size() > 3 ? allRx.subList(0, 3) : allRx;
+
+            model.addAttribute("patient",      patient);
             model.addAttribute("appointments", appts);
-            model.addAttribute("totalCount", appts.size());
+            model.addAttribute("recentPrescriptions", recentRx);
+            model.addAttribute("totalCount",        appts.size());
             model.addAttribute("pendingCount",
-                    appts.stream().filter(a -> a.getStatus() == AppointmentStatus.PENDING).count());
+                    appts.stream().filter(ap -> ap.getStatus() == AppointmentStatus.PENDING).count());
             model.addAttribute("approvedCount",
-                    appts.stream().filter(a -> a.getStatus() == AppointmentStatus.APPROVED).count());
+                    appts.stream().filter(ap -> ap.getStatus() == AppointmentStatus.APPROVED).count());
+            model.addAttribute("prescriptionCount", allRx.size());
         }
         return "patient-dashboard";
     }
 
     @GetMapping("/book")
     public String bookPage(@RequestParam(required = false) Integer doctorId, Model model) {
-        // Only show approved doctors
-        java.util.List<Doctor> approvedDoctors = doctorRepo.findAll()
+        List<Doctor> approvedDoctors = doctorRepo.findAll()
                 .stream().filter(Doctor::isApproved).toList();
         model.addAttribute("doctors", approvedDoctors);
 
@@ -76,12 +89,14 @@ public class PatientController {
             return "redirect:/patient/dashboard";
 
         } catch (RuntimeException e) {
-            java.util.List<Doctor> approvedDoctors = doctorRepo.findAll()
+            List<Doctor> approvedDoctors = doctorRepo.findAll()
                     .stream().filter(Doctor::isApproved).toList();
             model.addAttribute("error", e.getMessage());
             model.addAttribute("doctors", approvedDoctors);
             model.addAttribute("selectedDoctorId", doctorId);
             model.addAttribute("slots", slotService.getSlotsByDoctor(doctorId));
+            model.addAttribute("selectedDate",  appointmentDate);
+            model.addAttribute("selectedNotes", notes);
             return "book-appointment";
         }
     }

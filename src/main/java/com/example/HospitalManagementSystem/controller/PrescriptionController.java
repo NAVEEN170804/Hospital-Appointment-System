@@ -3,12 +3,13 @@ package com.example.HospitalManagementSystem.controller;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
-
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
+import com.example.HospitalManagementSystem.dao.AppointmentRepo;
+import com.example.HospitalManagementSystem.dao.PrescriptionRepo;
 import com.example.HospitalManagementSystem.entity.*;
 import com.example.HospitalManagementSystem.service.*;
 
@@ -16,117 +17,105 @@ import com.example.HospitalManagementSystem.service.*;
 public class PrescriptionController {
 
     @Autowired PrescriptionService prescriptionService;
-    @Autowired AppointmentService  appointmentService;
-    @Autowired DoctorService       doctorService;
     @Autowired PatientService      patientService;
+    @Autowired DoctorService       doctorService;
+    @Autowired AppointmentRepo     appointmentRepo;
+    @Autowired PrescriptionRepo    prescriptionRepo;   
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // DOCTOR: show form to add / edit prescription for an appointment
-    // ─────────────────────────────────────────────────────────────────────────
-    @GetMapping("/doctor/prescription/add/{appointmentId}")
-    public String addPrescriptionForm(@PathVariable int appointmentId,
-                                      Model model,
-                                      Principal principal) {
+    
+    @GetMapping("/doctor/prescription/new/{appointmentId}")
+    public String prescriptionForm(@PathVariable int appointmentId, Model model, Principal principal) {
+        Doctor doctor = doctorService.getDoctorByEmail(principal.getName()).orElseThrow();
+        Appointment appt = appointmentRepo.findById(appointmentId)
+                .orElseThrow(() -> new RuntimeException("Appointment not found"));
 
-        Doctor doctor = doctorService.getDoctorByEmail(principal.getName())
-                .orElseThrow(() -> new RuntimeException("Doctor not found"));
+     
+        if (appt.getDoctor().getId() != doctor.getId()) {
+            return "redirect:/doctor/dashboard";
+        }
 
-        Appointment appointment = appointmentService.getAllAppointments()
-                .stream()
-                .filter(a -> a.getId() == appointmentId
-                          && a.getDoctor().getId() == doctor.getId())
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Appointment not found or unauthorized"));
+        // Check if a prescription already exists for this appointment
+        Optional<Prescription> existing = prescriptionRepo.findByAppointmentId(appointmentId);
 
-        // Pre-fill if prescription already exists
-        prescriptionService.getByAppointmentId(appointmentId)
-                .ifPresent(p -> model.addAttribute("existing", p));
+        model.addAttribute("appointment", appt);
+        model.addAttribute("doctor", doctor);
 
-        model.addAttribute("appointment", appointment);
+        if (existing.isPresent()) {
+            model.addAttribute("prescription", existing.get());
+            model.addAttribute("isEdit", true);
+        } else {
+            model.addAttribute("prescription", new Prescription());
+            model.addAttribute("isEdit", false);
+        }
+
         return "prescription-form";
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // DOCTOR: save / update prescription
-    // ─────────────────────────────────────────────────────────────────────────
+    // ── DOCTOR: Save (create) or Update (edit) the prescription ──────────────
     @PostMapping("/doctor/prescription/save")
     public String savePrescription(@RequestParam int appointmentId,
-                                   @RequestParam String diagnosis,
                                    @RequestParam String medicines,
-                                   @RequestParam String instructions,
+                                   @RequestParam(required = false) String instructions,
+                                   @RequestParam(required = false) String diagnosis,
                                    Principal principal) {
+        Doctor doctor = doctorService.getDoctorByEmail(principal.getName()).orElseThrow();
+        Appointment appt = appointmentRepo.findById(appointmentId)
+                .orElseThrow(() -> new RuntimeException("Appointment not found"));
 
-        Doctor doctor = doctorService.getDoctorByEmail(principal.getName())
-                .orElseThrow(() -> new RuntimeException("Doctor not found"));
+        if (appt.getDoctor().getId() != doctor.getId()) {
+            return "redirect:/doctor/dashboard";
+        }
 
-        Appointment appointment = appointmentService.getAllAppointments()
-                .stream()
-                .filter(a -> a.getId() == appointmentId
-                          && a.getDoctor().getId() == doctor.getId())
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Unauthorized"));
+    
+        Optional<Prescription> existing = prescriptionRepo.findByAppointmentId(appointmentId);
 
-        // Update if already exists, otherwise create new
-        Prescription prescription = prescriptionService
-                .getByAppointmentId(appointmentId)
-                .orElse(new Prescription());
+        Prescription rx = existing.orElseGet(Prescription::new);
 
-        prescription.setAppointment(appointment);
-        prescription.setDiagnosis(diagnosis);
-        prescription.setMedicines(medicines);
-        prescription.setInstructions(instructions);
-        prescription.setIssuedDate(LocalDate.now());
+     
+        if (!existing.isPresent()) {
+            rx.setAppointment(appt);
+            rx.setPatient(appt.getPatient());
+            rx.setDoctor(doctor);
+            rx.setPrescribedDate(LocalDate.now());
+        }
 
-        prescriptionService.save(prescription);
+      
+        rx.setMedicines(medicines);
+        rx.setInstructions(instructions);
+        rx.setDiagnosis(diagnosis);
+
+        prescriptionService.save(rx);
+
         return "redirect:/doctor/dashboard";
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // DOCTOR: view all prescriptions they've written
-    // ─────────────────────────────────────────────────────────────────────────
-    @GetMapping("/doctor/prescriptions")
-    public String doctorPrescriptions(Model model, Principal principal) {
-        Doctor doctor = doctorService.getDoctorByEmail(principal.getName())
-                .orElseThrow();
-        List<Prescription> list = prescriptionService.getByDoctorId(doctor.getId());
-        model.addAttribute("prescriptions", list);
+    // ── DOCTOR: View all prescriptions the doctor wrote for a specific patient ─
+    @GetMapping("/doctor/patient/{patientId}/prescriptions")
+    public String viewPatientPrescriptions(@PathVariable int patientId,
+                                           Model model,
+                                           Principal principal) {
+        Doctor doctor = doctorService.getDoctorByEmail(principal.getName()).orElseThrow();
+        Patient patient = patientService.getById(patientId)
+                .orElseThrow(() -> new RuntimeException("Patient not found"));
+
+        List<Prescription> prescriptions =
+                prescriptionService.getByPatientAndDoctor(patientId, doctor.getId());
+
         model.addAttribute("doctor", doctor);
-        return "doctor-prescriptions";
-    }
-
-    // ─────────────────────────────────────────────────────────────────────────
-    // PATIENT: view all their prescriptions
-    // ─────────────────────────────────────────────────────────────────────────
-    @GetMapping("/patient/prescriptions")
-    public String patientPrescriptions(Model model, Principal principal) {
-        Patient patient = patientService.getPatientByEmail(principal.getName())
-                .orElseThrow();
-        List<Prescription> list = prescriptionService.getByPatientId(patient.getId());
-        model.addAttribute("prescriptions", list);
         model.addAttribute("patient", patient);
-        return "patient-prescriptions";
+        model.addAttribute("prescriptions", prescriptions);
+        return "doctor-patient-prescriptions";
     }
 
-    // ─────────────────────────────────────────────────────────────────────────
-    // PATIENT: view a single prescription detail
-    // ─────────────────────────────────────────────────────────────────────────
-    @GetMapping("/patient/prescription/{id}")
-    public String viewPrescription(@PathVariable int id,
-                                   Model model,
-                                   Principal principal) {
-
+    // ── PATIENT: View own full prescription history ───────────────────────────
+    @GetMapping("/patient/prescriptions")
+    public String myPrescriptions(Model model, Principal principal) {
         Patient patient = patientService.getPatientByEmail(principal.getName())
-                .orElseThrow();
+                .orElseThrow(() -> new RuntimeException("Patient not found"));
 
-        Prescription prescription = prescriptionService.getById(id)
-                .orElseThrow(() -> new RuntimeException("Prescription not found"));
-
-        // Security: patient can only view their own
-        if (prescription.getAppointment().getPatient().getId() != patient.getId()) {
-            return "redirect:/patient/prescriptions";
-        }
-
-        model.addAttribute("prescription", prescription);
-        return "prescription-detail";
+        List<Prescription> prescriptions = prescriptionService.getByPatient(patient.getId());
+        model.addAttribute("patient", patient);
+        model.addAttribute("prescriptions", prescriptions);
+        return "patient-prescriptions";
     }
 }

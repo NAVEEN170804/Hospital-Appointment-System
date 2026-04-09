@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Prescriptions — MedCare HMS</title>
+  <title>Patient Prescriptions — MedCare HMS</title>
   <link rel="stylesheet" th:href="@{/css/style.css}"/>
   <style>
-    /* ── Prescription card ───────────────────────────────────── */
+    /* ── Prescription timeline card ──────────────────────────── */
     .rx-card {
       background: var(--white);
       border: 1px solid var(--border);
@@ -28,46 +28,36 @@
     }
     .rx-header {
       display: flex;
-      align-items: flex-start;
+      align-items: center;
       justify-content: space-between;
-      margin-bottom: 10px;
-      gap: 12px;
+      margin-bottom: 14px;
     }
-    .rx-doctor-info { display: flex; align-items: center; gap: 10px; }
-    .rx-avatar {
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%);
-      display: flex; align-items: center; justify-content: center;
-      font-family: 'Sora', sans-serif;
-      font-size: 0.85rem; font-weight: 700;
-      color: var(--navy); flex-shrink: 0;
-    }
-    .rx-doctor-name { font-weight: 600; font-size: 0.9rem; color: var(--text-primary); }
-    .rx-spec { font-size: 0.75rem; color: var(--text-muted); margin-top: 1px; }
     .rx-date {
-      font-size: 0.75rem;
+      font-size: 0.78rem;
       font-weight: 600;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: .3px;
-      white-space: nowrap;
+      letter-spacing: .4px;
     }
     .rx-diagnosis {
       font-family: 'Sora', sans-serif;
-      font-size: 0.97rem;
+      font-size: 1rem;
       font-weight: 600;
       color: var(--text-primary);
-      margin: 10px 0 12px;
+      margin-bottom: 12px;
     }
-    .rx-divider { height: 1px; background: var(--border); margin: 12px 0; }
     .rx-section-label {
-      font-size: 0.68rem; font-weight: 700;
-      text-transform: uppercase; letter-spacing: .5px;
-      color: var(--text-muted); margin-bottom: 4px; margin-top: 10px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      margin-top: 10px;
     }
     .rx-medicines {
-      font-size: 0.87rem; color: var(--text-primary);
+      font-size: 0.88rem;
+      color: var(--text-primary);
       white-space: pre-wrap;
       background: var(--surface-2);
       border-left: 3px solid var(--teal);
@@ -76,42 +66,45 @@
       line-height: 1.6;
     }
     .rx-instructions {
-      font-size: 0.83rem; color: var(--text-secondary);
-      font-style: italic; white-space: pre-wrap; margin-top: 4px;
+      font-size: 0.84rem;
+      color: var(--text-secondary);
+      font-style: italic;
+      white-space: pre-wrap;
+      margin-top: 4px;
     }
   </style>
 </head>
 <body>
 <div class="layout">
 
-  <div th:replace="~{fragments/sidebar :: patient('prescriptions')}"></div>
+  <div th:replace="~{fragments/sidebar :: doctor('dashboard')}"></div>
 
   <div class="main">
     <div class="topbar">
       <div class="topbar-left">
         <div class="topbar-title">
-          <h1>My Prescriptions</h1>
-          <p>Your complete prescription history from all doctors</p>
+         <h2 th:text="|${patient.name}'s Prescriptions|"></h2>
+          <p>All prescriptions you have written for this patient</p>
         </div>
       </div>
       <div class="topbar-actions">
-        <a th:href="@{/patient/dashboard}" class="btn btn-outline btn-sm">← Dashboard</a>
+        <a th:href="@{/doctor/dashboard}" class="btn btn-outline btn-sm">← Back to Dashboard</a>
       </div>
     </div>
 
     <div class="content">
 
-      <!-- Profile Banner -->
+      <!-- Patient Profile Banner -->
       <div class="profile-card" style="margin-bottom:28px;">
         <div class="profile-avatar-lg"
              th:text="${#strings.toUpperCase(#strings.substring(patient.name,0,1))}">P</div>
         <div class="profile-info">
           <h2 th:text="${patient.name}">Patient Name</h2>
-          <p th:text="'Age ' + ${patient.age} + '  ·  ' + ${patient.gender}">Info</p>
+          <p th:text="'Age ' + ${patient.age} + '  ·  ' + ${patient.gender} + '  ·  ' + ${patient.phone}">Details</p>
         </div>
       </div>
 
-      <!-- Prescriptions Section -->
+      <!-- Prescription List -->
       <div class="section">
         <div class="section-header">
           <h2 class="section-title">Prescription History</h2>
@@ -130,8 +123,7 @@
               </svg>
             </div>
             <h3>No prescriptions yet</h3>
-            <p>Prescriptions issued by your doctors will appear here.</p>
-            <a th:href="@{/patient/book}" class="btn btn-teal">Book an Appointment</a>
+            <p>You haven't written any prescriptions for this patient.</p>
           </div>
         </div>
 
@@ -139,28 +131,17 @@
         <div th:if="${not #lists.isEmpty(prescriptions)}">
           <div class="rx-card" th:each="rx : ${prescriptions}">
             <div class="rx-header">
-              <div class="rx-doctor-info">
-                <div class="rx-avatar"
-                     th:text="${rx.doctor != null ? #strings.toUpperCase(#strings.substring(rx.doctor.name,0,1)) : 'D'}">D</div>
-                <div>
-                  <div class="rx-doctor-name"
-                       th:text="'Dr. ' + (${rx.doctor != null ? rx.doctor.name : 'Unknown'})">Dr. Name</div>
-                  <div class="rx-spec"
-                       th:text="${rx.doctor != null ? rx.doctor.specialization : ''}">Specialization</div>
-                </div>
-              </div>
               <div class="rx-date"
                    th:text="${#temporals.format(rx.prescribedDate, 'dd MMM yyyy')}">Date</div>
+              <span class="badge" style="background:var(--teal-light);color:var(--teal-dark);">Rx</span>
             </div>
 
-            <div class="rx-divider"></div>
-
             <div class="rx-diagnosis"
-                 th:text="${rx.diagnosis != null and !#strings.isEmpty(rx.diagnosis) ? '🩺 ' + rx.diagnosis : 'No diagnosis noted'}">
+                 th:text="${rx.diagnosis != null and !#strings.isEmpty(rx.diagnosis) ? rx.diagnosis : 'No diagnosis noted'}">
               Diagnosis
             </div>
 
-            <div class="rx-section-label">Medicines Prescribed</div>
+            <div class="rx-section-label">Medicines</div>
             <div class="rx-medicines" th:text="${rx.medicines}">—</div>
 
             <div th:if="${rx.instructions != null and !#strings.isEmpty(rx.instructions)}">
@@ -169,8 +150,8 @@
             </div>
           </div>
         </div>
-
       </div>
+
     </div>
   </div>
 </div>

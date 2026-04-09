@@ -2,10 +2,14 @@ package com.example.HospitalManagementSystem.controller;
 
 import java.security.Principal;
 import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import com.example.HospitalManagementSystem.dao.PrescriptionRepo;
 import com.example.HospitalManagementSystem.entity.*;
 import com.example.HospitalManagementSystem.service.*;
 
@@ -13,9 +17,10 @@ import com.example.HospitalManagementSystem.service.*;
 @RequestMapping("/doctor")
 public class DoctorController {
 
-    @Autowired DoctorService doctorService;
-    @Autowired AppointmentService appointmentService;
+    @Autowired DoctorService         doctorService;
+    @Autowired AppointmentService    appointmentService;
     @Autowired DoctorTimeSlotService slotService;
+    @Autowired PrescriptionRepo      prescriptionRepo;   // ← NEW
 
     @GetMapping("/dashboard")
     public String dashboard(Model model, Principal principal) {
@@ -27,11 +32,24 @@ public class DoctorController {
             model.addAttribute("totalCount", 0);
             model.addAttribute("pendingCount", 0);
             model.addAttribute("approvedCount", 0);
+            model.addAttribute("prescriptionMap", new HashMap<>());
         } else {
-            java.util.List<Appointment> appts =
-                    appointmentService.getDoctorAppointments(doctor.getId());
+            List<Appointment> appts = appointmentService.getDoctorAppointments(doctor.getId());
+
+            // Build a map of appointmentId → true for every APPROVED appointment
+            // that already has a prescription written. Used by the dashboard HTML
+            // to toggle between "Write Prescription" and "Edit Prescription".
+            Map<Integer, Boolean> prescriptionMap = new HashMap<>();
+            for (Appointment a : appts) {
+                if (a.getStatus() == AppointmentStatus.APPROVED) {
+                    prescriptionRepo.findByAppointmentId(a.getId())
+                            .ifPresent(rx -> prescriptionMap.put(a.getId(), true));
+                }
+            }
+
             model.addAttribute("doctor", doctor);
             model.addAttribute("appointments", appts);
+            model.addAttribute("prescriptionMap", prescriptionMap);
             model.addAttribute("totalCount", appts.size());
             model.addAttribute("pendingCount",
                     appts.stream().filter(a -> a.getStatus() == AppointmentStatus.PENDING).count());
