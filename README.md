@@ -91,20 +91,20 @@ src/
 1. Clone the repository  
 git clone https://github.com/NAVEEN170804/Hospital-Appointment-System.git
 
-2. Create database
+2. Create database  
 CREATE DATABASE hospital;
 
 3. Configure application.properties
 
-spring.datasource.url=jdbc:mysql://localhost:3306/hospital
-spring.datasource.username=root
-spring.datasource.password=your_password
-spring.jpa.hibernate.ddl-auto=update
+spring.datasource.url=jdbc:mysql://localhost:3306/hospital  
+spring.datasource.username=root  
+spring.datasource.password=your_password  
+spring.jpa.hibernate.ddl-auto=update  
 
-4. Run the project
+4. Run the project  
 mvn spring-boot:run
 
-5. Open browser
+5. Open browser  
 http://localhost:8080/login
 
 ------------------------------------------------------------
@@ -120,33 +120,33 @@ Password : admin123
 ## 📸 Screenshots
 
 * 🔐 Login Page
-<img width="1920" height="1020" alt="Login_page" src="https://github.com/user-attachments/assets/964b099b-c62c-40ed-b08d-8ad7b6c94234" />
+<img width="1920" height="1020" alt="Login_page" src="https://github.com/user-attachments/assets/964b099b-c62c-40ed-b08d-8ad7b6c94234" />  
 
 * 📝 Registration Page
-<img width="1920" height="1020" alt="Register_Page" src="https://github.com/user-attachments/assets/f1878ad5-a4b0-473d-bd80-9206b41de002" />
+<img width="1920" height="1020" alt="Register_Page" src="https://github.com/user-attachments/assets/f1878ad5-a4b0-473d-bd80-9206b41de002" />  
  
 * 👨‍💼 Admin Dashboard
-<img width="1920" height="1020" alt="Admin-dashboard" src="https://github.com/user-attachments/assets/26a675cd-0ce8-405e-91db-83ec426e5083" />
+<img width="1920" height="1020" alt="Admin-dashboard" src="https://github.com/user-attachments/assets/26a675cd-0ce8-405e-91db-83ec426e5083" />  
 
 * 👨‍💼 Admin View Appointments
-<img width="1920" height="1020" alt="Admin-all-appointments" src="https://github.com/user-attachments/assets/590fa4e9-f1b0-4a20-b665-9edb2d198183" />
+<img width="1920" height="1020" alt="Admin-all-appointments" src="https://github.com/user-attachments/assets/590fa4e9-f1b0-4a20-b665-9edb2d198183" />  
 
 * 🧑‍⚕️ Doctor Dashboard
-<img width="1920" height="1020" alt="Doctor-dashboard" src="https://github.com/user-attachments/assets/ea5c9acf-0a84-4427-9756-27814acb51a8" />
+<img width="1920" height="1020" alt="Doctor-dashboard" src="https://github.com/user-attachments/assets/ea5c9acf-0a84-4427-9756-27814acb51a8" />  
 * 🧑‍⚕️ Doctor Prescription
- <img width="1920" height="1020" alt="Doctor-prescription-write" src="https://github.com/user-attachments/assets/d4a0d1a3-e4de-4ea6-9f13-858b29ee89ce" />
+ <img width="1920" height="1020" alt="Doctor-prescription-write" src="https://github.com/user-attachments/assets/d4a0d1a3-e4de-4ea6-9f13-858b29ee89ce" />  
 * 🧑‍⚕️ Doctor Time Slot
-<img width="1920" height="1020" alt="Doctor-time-slots" src="https://github.com/user-attachments/assets/010866b9-38c0-433b-bb2f-46d0c6fcd60a" />
+<img width="1920" height="1020" alt="Doctor-time-slots" src="https://github.com/user-attachments/assets/010866b9-38c0-433b-bb2f-46d0c6fcd60a" />  
 
 * 🧑 Patient Dashboard
-<img width="1920" height="1020" alt="Patient-dashboard" src="https://github.com/user-attachments/assets/abb0f318-3b8b-4f19-b1e3-53e23bdce068" />
+<img width="1920" height="1020" alt="Patient-dashboard" src="https://github.com/user-attachments/assets/abb0f318-3b8b-4f19-b1e3-53e23bdce068" />  
 
 * 📅 Appointment Booking
-<img width="1920" height="1020" alt="Patient-book-appointment" src="https://github.com/user-attachments/assets/1964c625-6fc2-43ed-ae31-cced0b2fd987" />
+<img width="1920" height="1020" alt="Patient-book-appointment" src="https://github.com/user-attachments/assets/1964c625-6fc2-43ed-ae31-cced0b2fd987" />  
 
   
 * 📝 Prescription History Page
-<img width="1920" height="1020" alt="Patient-prescription-history" src="https://github.com/user-attachments/assets/afa86a91-0772-4c10-8329-e9a405bb65e3" />
+<img width="1920" height="1020" alt="Patient-prescription-history" src="https://github.com/user-attachments/assets/afa86a91-0772-4c10-8329-e9a405bb65e3" />  
 
 
 -------------------------------------------------------
