@@ -94,8 +94,7 @@ git clone https://github.com/NAVEEN170804/Hospital-Appointment-System.git
 2. Create database  
 CREATE DATABASE hospital;
 
-3. Configure application.properties
-
+3. Configure application.properties  
 spring.datasource.url=jdbc:mysql://localhost:3306/hospital  
 spring.datasource.username=root  
 spring.datasource.password=your_password  
