@@ -88,7 +88,7 @@ src/
 
 ⚙️ SETUP & INSTALLATION
 
-1. Clone the repository
+1. Clone the repository  
 git clone https://github.com/NAVEEN170804/Hospital-Appointment-System.git
 
 2. Create database
